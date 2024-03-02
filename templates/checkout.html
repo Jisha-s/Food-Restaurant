@@ -1,0 +1,163 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body_block %}
+
+<style>
+  /* Table Styling*/
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      margin-top: 10px;
+      background-color: #8b7545;
+      color: white;
+  }
+
+  thead {
+      background-color: #403212;
+      color: #fff;
+  }
+
+  th, td {
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+  }
+
+  /* Checkout Form Styling */
+  .checkout-form {
+      background-color: #f6f6f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+  }
+
+  .checkout-form h3 {
+      color: #403212;
+      border-bottom: 2px solid #403212;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+  }
+
+  .checkout-form label {
+      display: block;
+      margin-bottom: 5px;
+      color: #403212;
+  }
+
+  .checkout-form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+  }
+
+  .order-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ffbe33;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+  }
+
+  .order-btn:hover {
+      background-color: #8b7545;
+  }
+
+  /* Summary Table Styling */
+  .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+  }
+
+  .summary-table th, .summary-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+  }
+
+  .summary-table th {
+      background-color: #403212;
+      color: #fff;
+  }
+
+  .summary-table td {
+      background-color: #8b7545;
+  }
+</style>
+
+ <!-- checkout section -->
+ <body class="sub_page">
+  <section class="food_section layout_padding">
+      <div class="container">
+          <div class="heading_container heading_center">
+              <h2>Checkout</h2>
+          </div>
+  
+          {% if cart_items %}
+          <table class="summary-table">
+              <thead>
+                   <tr>                                                                                                          
+                      <th>Product Image</th>
+                      <th>Product Title</th>
+                       <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Total</th>  
+                  </tr>
+              </thead>
+              <tbody>
+              {% for item in cart_items %}
+                  <tr>
+                      <td>
+                          <img src="{{ item.product.product_image.url }}" alt="{{ item.product.title }}" 
+                          style="max-width: 50px;
+                          height: 50px;">
+                      </td>
+                      <td>{{ item.product.title }}</td>
+                      <td class="cost">${{ item.product.price|floatformat:2 }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td class="total">${{ item.total_price|floatformat:2 }}</td>
+                  </tr>
+              {% endfor %}
+              <tr id="subtotal">
+                <td colspan="3" style="text-align:right; font-weight:bold; font-size: 25px;">Subtotal:</td>
+                <td colspan="2">${{ subtotal }}</td>
+              </tr>
+              </tbody>
+          </table>
+  
+          <div class="checkout-form">
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <h3>Shipping Details</h3>
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" required>
+    
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+    
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" required>
+    
+                    <label for="postal_code">Postal Code</label>
+                    <input type="text" id="postal_code" name="postal_code" required>
+
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" required>
+    
+                    <input type="submit" value="Place Order" class="order-btn">
+                </form>
+          </div>
+
+          {% else %}
+          <p class="mt-4" >Your cart is empty!</p>
+          {% endif %}
+      </div>
+  </section>
+ 
+</body>
+  <!-- end checkout section -->
+{% endblock %}

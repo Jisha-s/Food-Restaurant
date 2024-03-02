@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body_block %}
+
+<body class="sub_page">
+
+
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding">
+    <div class="container  ">
+      {% for aboutus in about %}
+      <div class="row">
+        <div class="col-md-6 ">
+          <div class="img-box">
+            <img src="{{ aboutus.post_image.url }}" alt="">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                {{ aboutus.title}}
+              </h2>
+            </div>
+            <p>
+             {{ aboutus.description }}
+            </p>
+            <a href="">
+              Read More
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- end about section -->
+
+</body>
+
+{% endblock %}

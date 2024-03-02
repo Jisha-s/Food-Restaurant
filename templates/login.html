@@ -1,0 +1,35 @@
+
+{% extends "layout.html" %}
+{% load static %}
+{% block body_block %}
+
+
+
+<body class="sub_page">
+  <!-- login section -->
+  <section class="book_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Login
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>            
+              
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end login section -->
+
+</body>
+
+{% endblock %}

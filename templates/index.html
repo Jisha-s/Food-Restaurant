@@ -1,0 +1,436 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body_block %}
+
+
+<body>
+  <!-- slider section --> 
+  <section class="slider_section ">
+    <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        {% for slider in sliders %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="container ">
+            <div class="row">
+              <div class="col-md-7 col-lg-6 ">
+                <div class="detail-box">
+                  <h1>
+                    {{ slider.title }}
+                  </h1>
+                  <p>
+                    {{ slider.description }}  
+                  </p>
+                  <div class="btn-box">
+                    <a href="" class="btn1">
+                      Order Now
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="container">                                
+        <ol class="carousel-indicators">
+          {% for slider in sliders %}
+            <li data-target="#customCarousel1" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+          {% endfor %}
+          {% comment %} <li data-target="#customCarousel1" data-slide-to="1"></li>
+          <li data-target="#customCarousel1" data-slide-to="2"></li> {% endcomment %}
+        </ol>
+      </div>
+    </div>
+  </section>
+  <!-- end slider section -->
+
+  <!-- offer section -->
+  <section class="offer_section layout_padding-bottom">
+    <div class="offer_container">
+      <div class="container ">
+        <div class="row">
+          {% for product in products_offer %}
+          <div class="col-md-6  ">
+            <div class="box ">
+              <div class="img-box">
+                <img src="{{ product.product_image.url }}" alt="{{ product.title }}">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  {{ product.title }}
+                </h5>
+                <h6>
+                  <span>{{ product.offer_percentage }}</span> %Off
+                </h6>
+                <a href="">
+                  Order Now <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
+                    <g>
+                      <g>
+                        <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                     c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                      </g>
+                    </g>
+                    <g>
+                      <g>
+                        <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                     C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                     c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                     C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                      </g>
+                    </g>
+                    <g>
+                      <g>
+                        <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                     c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                      </g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end offer section -->
+
+  <!-- food section -->
+  <section class="food_section layout_padding-bottom">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Our Menu
+        </h2>
+      </div>
+
+      <ul class="filters_menu">
+        <li class="active" data-filter="*">All</li>
+        <li data-filter=".burger">Burger</li>
+        <li data-filter=".pizza">Pizza</li>
+        <li data-filter=".pasta">Pasta</li>
+        <li data-filter=".fries">Fries</li>
+        
+      </ul>
+
+      <div class="filters-content">
+        <div class="row grid">
+          {% for item in products %}
+          <div class="col-sm-6 col-lg-4 all {{ item.content_type }}">
+            <div class="box">
+              <div>
+                <div class="img-box">
+                  <img src="{{ item.product_image.url }}" alt="">
+                </div>
+                <div class="detail-box">
+                  <h5>
+                    {{ item.title }}
+                  </h5>
+                  <p>
+                    {{ item.description }}                
+                  </p>
+                  <div class="options">
+                    <h6>
+                      ${{ item.price }}
+                    </h6>
+                    <input type="hidden" class = "btn-val" name="btn-val" value="{{ item.id }}"></input>
+                    <input type="hidden" class="quantity" name="quantity" value="1"> </input>
+                    <a href="" class="add-to-cart" data-item-id="{{ item.id }}" onclick=addToCart(event)>
+                      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
+                        <g>
+                          <g>
+                            <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                         c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                          </g>
+                        </g>
+                        <g>
+                          <g>
+                            <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                         C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                         c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                         C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                          </g>
+                        </g>
+                        <g>
+                          <g>
+                            <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                         c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                          </g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                        <g>
+                        </g>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="btn-box">
+        <a href="">
+          View More
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- end food section -->
+
+  <!-- about section -->
+  <section class="about_section layout_padding">
+    <div class="container  ">
+
+      <div class="row">
+        {% for abouts in about %}
+        <div class="col-md-6 ">
+          <div class="img-box">
+            <img src="{{ abouts.post_image.url }}" alt="">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-box">
+           
+            <div class="heading_container">
+              <h2>
+                {{ abouts.title }}
+              </h2>
+            </div>
+            <p>
+              {{ abouts.description }}
+            </p>
+            <a href="">
+              {{ abouts.subtitle}}
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- end about section -->
+
+  <!-- book section -->
+  <section class="book_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Book A Table
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container">
+            <form id="bookingForm" method="post">
+              {% csrf_token %}
+              <div>
+                <input type="text" class="form-control" id="name"  name="name" placeholder="Your Name" />
+              </div>
+              <div>
+                <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" />
+              </div>
+              <div>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" />
+              </div>
+              <div>
+                <select class="form-control nice-select wide" id="num_of_persons" name="num_of_persons">
+                  <option value="" disabled selected>How many persons?</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <div>
+                <input type="date" class="form-control" id="date" name="date" required>
+              </div>
+              <div class="btn_box">
+                <button>
+                  Book Now
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="map_container ">
+            <div id="googleMap"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+      $(document).ready(function () {
+          $('#bookingForm').on('submit', function (e) {
+              e.preventDefault();
+  
+              var name = $('#name').val();
+              var number = $('#number').val();
+              var email = $('#email').val();
+              var num_of_persons = $('#num_of_persons').val();
+              var date = $('#date').val();
+  
+              $.ajax({
+                  type: 'POST',
+                  url: '{% url 'book_table' %}',
+                  data: {
+                      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                      'name': name,
+                      'number': number,
+                      'email': email,
+                      'num_of_persons': num_of_persons,
+                      'date': date
+                  },
+                  success: function (response) {
+                      alert("Table booked successfully!!!!!!");
+                  },
+                  error: function (error) {
+                      alert("There was an error. Please try again.");
+                  }
+              });
+          });
+      });
+  </script>
+  <!-- end book section -->
+
+  <!-- client section -->
+  <section class="client_section layout_padding-bottom">
+    <div class="container">
+      <div class="heading_container heading_center psudo_white_primary mb_45">
+        <h2>
+          What Says Our Customers
+        </h2>
+      </div>
+      <div class="carousel-wrap row ">
+        <div class="owl-carousel client_owl-carousel">
+          {% for content in customer %}
+          <div class="item">
+            <div class="box">  
+              <div class="detail-box">
+                <p>
+                  {{ content.description }}                
+                </p>
+                <h6>
+                  {{ content.title }}
+                </h6>
+                <p>
+                  {{ content.subtitle }}
+                </p>
+              </div>
+              <div class="img-box">
+                <img src="{{ content.post_image.url }}" alt="" class="box-img">
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end client section -->
+  
+ <!--script for adiing items on menu section --> 
+ <script>
+  function addToCart(event) {
+    event.preventDefault();  // Prevent the default action
+
+    const itemId = $(event.target).closest('.detail-box').find('.btn-val').val();
+    const quantity = parseInt($(event.target).closest('.detail-box').find('.quantity').val());
+
+    $.ajax({
+        url: "/add_to_cart/",
+        type: "POST", 
+        data: {
+            'item_id': itemId,
+            'quantity': quantity,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function(data) {
+            if (data.success) {
+                // Update the cart count on the navbar
+                $("#cart-count").text(data.cart_count);
+
+                // Show an alert indicating success
+                alert("Item successfully added to cart!");
+            } else {
+                alert("Error adding to cart.");
+            }
+        },
+        error: function(error) {
+            console.error("Error in AJAX call:", error);
+            alert("Error adding to cart. Please try again.");
+        }
+    });
+  }
+
+  $(document).on("click", ".add-to-cart", addToCart);
+
+</script>
+
+</body>
+
+
+{% endblock %}

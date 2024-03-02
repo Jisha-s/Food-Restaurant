@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+{% block title %} Home {% endblock %}
+
+{% block body_block %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+     <title>Image Classification Results</title>
+</head>
+<body>
+    <!-- <h1>Image Classification Results</h1> -->
+    <ul>
+    {% for result in results %}
+        <li>{{ result }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
+{% endblock %}

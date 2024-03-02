@@ -1,0 +1,274 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block body_block %}
+<style>
+  /* Table Styling */
+  body {
+    background-image: url('{% static "images/hero-bg.jpg" %}');
+    background-size: cover;  /* This will cover the entire viewport */
+    background-repeat: no-repeat;  /* This will prevent the image from repeating */
+    background-attachment: fixed; /* This will fix the background position */
+}
+
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      margin-top: 10px;
+      background-color: #fff;
+      color: rgb(11, 11, 11);
+      
+  }
+   
+  thead {
+      background-color: #403212;
+      color: #fff;
+      
+      
+  }
+  
+  th, td {
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+      
+      
+      
+  }
+
+  .edit-btn, .remove-btn {
+      padding: 5px 10px;
+      margin-left: 5px;
+      margin-top: 3px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      
+  }
+
+  .edit-btn {
+      background-color: #ffbe33;
+      color: white;
+  }
+  
+  .edit-btn:hover {
+      background-color: #6b572b;
+  }
+  
+  .remove-btn {
+      background-color: #ffbe33;
+      color: white;
+  }
+  
+  .remove-btn:hover {
+      background-color: #6b572b;
+  }
+  #subtotal{
+    background-color: #403212;
+  }
+ #subtotal{
+    color: white;
+ }
+  .number-input {
+    border: 2px solid #ddd;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.number-input .plus,
+.number-input .minus {
+    display: block;
+    height: 50%;
+    width: 30px; /* Adjust width as needed */
+    text-align: center;
+    border: none;
+    background-color: #ffbe33;
+    cursor: pointer;
+}
+.number-input input[type=number] {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+    border: none;
+    width: 40px;
+}
+.order-btn{
+    padding: 5px 10px;
+      margin-left: 5px;
+      margin-top: 3px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: #ffbe33;
+      color: white;
+}
+.order-btn:hover{
+    background-color: #8b7545;
+    color: white;
+}
+h2{
+    color: #fff;
+}
+</style>
+
+<body class="sub_page">
+<section class="food_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>Your Cart</h2>
+        </div>
+
+        {% if cart_items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Image</th>
+                    <th>Product Title</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td>
+                        <img src="{{ item.product.product_image.url }}" alt="{{ item.product.title }}" 
+                        style="max-width: 50px;
+                        height: 50px;">
+                    </td> 
+                    <td>{{ item.product.title }}</td>
+                    <td class="cost">${{ item.product.price|floatformat:2 }}</td>
+                    <td>
+                        <div class="number-input">
+                            <input class="quantity" type="number"  value="{{ item.quantity }}" id="quantity_{{ item.product.id }}" min="1" placeholder="0" >
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp();" class="plus">+</button>
+                                   <button onclick="this.parentNode.querySelector('input[type=number]').stepDown();" class="minus">−</button>
+                        </div>
+                    </td>
+                    <td  class="total">${{ item.total_price|floatformat:2 }}</td>
+                    <td>
+                        <button class="edit-btn" id="edit-btn"  data-item-id="{{ item.product.id }}">Update</button>
+                        <button class="remove-btn" id="remove-btn" data-item-id="{{ item.product.id }}">Remove</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr id="subtotal">
+              <td colspan="4" style="text-align:right; font-weight:bold; font-size: 25px;">Subtotal:</td>
+              <td>${{ subtotal|floatformat:2 }}</td>
+              <td>
+                
+                {% if user.is_authenticated %}
+                    <a href="{% url 'checkout' %}" class="order-btn">Order Now</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="order-btn">Register to Order</a>
+                {% endif %}
+            
+              </td>
+          </tr>
+          
+            </tbody>
+        </table>
+        {% else %}
+        <p class="mt-4">Your cart is empty!</p>
+        {% endif %}
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+
+
+    $(".minus, .plus, .quantity").on("input click", function() {
+        var $row = $(this).closest('tr'); //get closest tr
+        var quan = parseInt($row.find('.quantity').val()); //get qty
+        
+        if (isNaN(quan) || quan < 0) {
+            quan = 0;
+            $row.find('.quantity').val(0); // reset input to 0 if invalid
+        }
+
+        var cost = parseFloat($row.find('.cost').text().replace('$', ''));
+        var total = (cost * quan).toFixed(2);
+        $row.find('.total').text('$' + total); //add total 
+
+        // Update the subtotal (grand total)
+        var subtotal = 0;
+        $('.total').each(function() {
+            subtotal += parseFloat($(this).text().replace('$', ''));
+        });
+        $('#subtotal td:eq(1)').text('$' + subtotal.toFixed(2));
+    });
+
+
+
+$(".edit-btn").click(function() {
+    var itemId = $(this).data('item-id').toString();
+    var newQuantity = $("#quantity_" + itemId).val();
+   
+
+    $.ajax({
+        type: "POST",
+        url: "/edit_cart_item/",
+        data: {
+            'item_id': itemId,
+            'new_quantity': newQuantity,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                alert(response.message);
+        
+                 // Calculate and update the displayed total price for the item
+                var pricePerItem = parseFloat($(this).closest('tr').find('td:eq(2)').text().replace('$', ''));
+                var newTotalPrice = newQuantity * pricePerItem;
+                $(this).closest('tr').find('td:eq(4)').text('$' + newTotalPrice.toFixed(2));
+                
+
+              } else {
+                alert(response.message);
+            }
+        },
+        error: function(error) {
+            console.log(error);
+            alert("An error occurred.");
+        }
+    });
+});
+
+$(".remove-btn").click(function() {
+    var itemId = $(this).data('item-id').toString();
+
+    $.ajax({
+        type: "POST",
+        url: "/remove_from_cart/",
+        data: {
+            'item_id': itemId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        }, 
+        success: (response) => {
+          if (response.success) {
+              $(this).closest('tr').remove();
+              alert("Item removed successfully!");
+
+              // Updating the cart count
+              let currentCount = parseInt($("#cart-count").text());
+              $("#cart-count").text(currentCount - 1);
+          } else {
+              alert(response.message);
+          }
+      },
+        error: function(error) {
+            console.log(error);
+            alert("An error occurred.");
+        }
+    });
+});
+});
+</script>
+</body> 
+{% endblock %}

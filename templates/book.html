@@ -1,0 +1,97 @@
+
+{% extends "layout.html" %}
+{% load static %}
+{% block body_block %}
+
+
+
+<body class="sub_page">
+  <!-- book section -->
+  <section class="book_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Book A Table
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container">
+            <form id="bookingForm" method="post">
+              {% csrf_token %}
+              <div>
+                <input type="text" class="form-control" id="name"  name="name" placeholder="Your Name" />
+              </div>
+              <div>
+                <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" />
+              </div>
+              <div>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" />
+              </div>
+              <div>
+                <select class="form-control nice-select wide" id="num_of_persons" name="num_of_persons">
+                  <option value="" disabled selected>How many persons?</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <div>
+                <input type="date" class="form-control" id="date" name="date" required>
+              </div>
+              <div class="btn_box">
+                <button>
+                  Book Now
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="map_container ">
+            <div id="googleMap"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end book section -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#bookingForm').on('submit', function (e) {
+            e.preventDefault();
+
+            var name = $('#name').val();
+            var number = $('#number').val();
+            var email = $('#email').val();
+            var num_of_persons = $('#num_of_persons').val();
+            var date = $('#date').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'book_table' %}',
+                data: {
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    'name': name,
+                    'number': number,
+                    'email': email,
+                    'num_of_persons': num_of_persons,
+                    'date': date
+                },
+                success: function (response) {
+                    alert("Table booked successfully!!!!!!");
+                },
+                error: function (error) {
+                    alert("There was an error. Please try again.");
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+
+{% endblock %}
